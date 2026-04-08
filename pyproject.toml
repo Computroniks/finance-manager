@@ -24,7 +24,8 @@ build-backend = "poetry.core.masonry.api"
 [dependency-groups]
 dev = [
     "pytest (>=9.0.3,<10.0.0)",
-    "httpx (>=0.28.1,<0.29.0)"
+    "httpx (>=0.28.1,<0.29.0)",
+    "pylint (>=4.0.5,<5.0.0)"
 ]
 
 [tool.fastapi]
@@ -34,3 +35,16 @@ entrypoint = "app.main:app"
 packages = [
     { include = "app" },
 ]
+
+[tool.pytest.ini_options]
+pythonpath = [
+  "."
+]
+
+[tool.codespell]
+skip = 'poetry.lock'
+count = true
+quiet-level = 3
+
+[tool.pylint]
+init-hook='import sys; sys.path.append(".")'
