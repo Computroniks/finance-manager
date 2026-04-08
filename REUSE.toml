@@ -1,0 +1,4 @@
+version = 1
+SPDX-PackageName = "finance-manager"
+SPDX-PackageSupplier = "Zoe Nickson"
+annotations = []
