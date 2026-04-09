@@ -22,6 +22,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install poetry
           poetry install --with=dev
-      - name: Analysing the code with pylint
+      - name: Analysing the application code with pylint
         run: |
-          poetry run pylint $(git ls-files '*.py')
+          poetry run pylint $(git ls-files 'app/*.py' 'app/**/*.py')
+
+      - name: Analysing the test code with pylint
+        run: |
+          poetry run pylint $(git ls-files 'tests/*.py' 'tests/**/*.py')

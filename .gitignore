@@ -1,6 +1,11 @@
 # SPDX-FileCopyrightText: 2026 GitHub Inc.
 # SPDX-License-Identifier: CC0-1.0
 
+# Finance Manager Specific
+config.toml
+
+# Python Generic
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
