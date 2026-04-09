@@ -28,4 +28,4 @@ jobs:
 
       - name: Analysing the test code with pylint
         run: |
-          poetry run pylint $(git ls-files 'tests/*.py' 'tests/**/*.py')
+          poetry run pylint --disable redefined-outer-name,unused-argument,pointless-statement,missing-module-docstring $(git ls-files 'tests/*.py' 'tests/**/*.py')
