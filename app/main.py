@@ -7,11 +7,11 @@ Main server entry point
 
 from fastapi import FastAPI
 
-from app.config import config_manager
+from app.config import manager
 from app import db
 
 db.manager.init_db()
-config_manager.reload()
+manager.reload()
 app = FastAPI()
 
 

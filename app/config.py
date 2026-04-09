@@ -149,4 +149,4 @@ class ConfigManager:
         self._config = ConfigManager._load_toml_config(self.path)
 
 
-config_manager = ConfigManager()
+manager = ConfigManager()

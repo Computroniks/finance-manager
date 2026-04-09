@@ -8,7 +8,7 @@ import logging
 from sqlalchemy import create_engine, Engine
 from sqlalchemy.orm import DeclarativeBase
 
-from app.config import config_manager
+from app import config
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +36,7 @@ class DBManager:
         """
         Connect to SQlite database
         """
-        db_path = config_manager.config.database.path
+        db_path = config.manager.config.database.path
         logger.info("Connecting to local sqlite database: %s", db_path)
         self._engine = create_engine(f"sqlite:///{db_path}")
 
@@ -69,7 +69,7 @@ class DBManager:
         if self._engine is not None:
             return self._engine
 
-        if config_manager.config.database.type == "sqlite":
+        if config.manager.config.database.type == "sqlite":
             self._connect_sqlite()
         else:
             raise UnsupportedDatabaseError
