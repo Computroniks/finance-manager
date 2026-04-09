@@ -3,6 +3,7 @@
 
 # Finance Manager Specific
 config.toml
+app.db
 
 # Python Generic
 
