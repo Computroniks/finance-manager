@@ -4,9 +4,11 @@
 """Database handling for the application"""
 
 import logging
+from typing import Annotated
 
+from fastapi import Depends
 from sqlalchemy import create_engine, Engine
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import DeclarativeBase, Session
 
 from app import config
 
@@ -77,5 +79,25 @@ class DBManager:
         # We know _engine will be an Engine by this point
         return self._engine  # type: ignore
 
+    def get_session(self):
+        """
+        Get a new session to the DB
+
+        Yields:
+            Created session
+        """
+        with Session(self.engine) as session:
+            yield session
+
+    def reset(self):
+        """
+        Reset the connection
+
+        Will reset the connection and force a reconnect
+        """
+        self._engine = None
+
 
 manager = DBManager()
+
+DBSession = Annotated[Session, Depends(manager.get_session)]

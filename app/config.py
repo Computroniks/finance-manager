@@ -10,9 +10,11 @@ config = get_config()
 """
 
 import os.path
+import os
 from typing import Literal
 import tomllib
 import logging
+from enum import Enum
 
 from pydantic import BaseModel, Field, FilePath, ValidationError
 
@@ -26,10 +28,25 @@ class SQLiteConfig(BaseModel):
     path: FilePath
 
 
+class AlgoEnum(str, Enum):
+    """Valid JWT algorithms"""
+
+    HS256 = "HS256"
+
+
+class AuthConfig(BaseModel):
+    """Pydantic model for auth related config"""
+
+    jwt_secret: str
+    jwt_algo: AlgoEnum
+    token_lifetime: int
+
+
 class Config(BaseModel):
     """Pydantic model for config file"""
 
     database: SQLiteConfig = Field(..., discriminator="type")
+    auth: AuthConfig
 
 
 class ConfigError(Exception):
@@ -60,7 +77,7 @@ class ConfigManager:
     def __init__(self) -> None:
         self.lookup_paths = ["./", "/etc/finance-manager/"]
         self._config: Config | None = None
-        self._path: str | None = None
+        self._path: str | None = os.getenv("FINANCE_MANAGER_CONFIG_PATH")
 
     @staticmethod
     def _load_toml_config(path: str) -> Config:
@@ -146,6 +163,7 @@ class ConfigManager:
     def reload(self) -> None:
         """Force reloading the config file."""
 
+        self._path = None
         self._config = ConfigManager._load_toml_config(self.path)
 
 
