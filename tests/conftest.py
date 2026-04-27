@@ -46,6 +46,8 @@ token_lifetime=86400
 
 @pytest.fixture
 def client(valid_config_file: str):
+    """HTTP client"""
+
     config.manager.lookup_paths = [str(Path(valid_config_file).parent)]
     config.manager.reload()
     db.manager.reset()
@@ -61,6 +63,7 @@ def client(valid_config_file: str):
 
 @pytest.fixture
 def token(client: TestClient) -> str:
+    """Access token"""
     response = client.post(
         "/auth/token",
         data={
@@ -75,6 +78,7 @@ def token(client: TestClient) -> str:
 
 @pytest.fixture
 def no_scope_token(client: TestClient) -> str:
+    """Access token with a dummy scope"""
     return client.post(
         "/auth/token",
         data={

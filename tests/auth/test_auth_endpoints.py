@@ -3,10 +3,10 @@
 
 from fastapi.testclient import TestClient
 from fastapi import status
+import jwt
 
 from app import config
 from app.auth.flows import VALID_SCOPES
-import jwt
 
 from tests import defaults
 

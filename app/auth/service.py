@@ -140,6 +140,7 @@ def authenticate_user(db: Session, username: str, password: str) -> User:
         # Verify a dummy password to avoid timing attacks
         verify_password(
             "a dummy password",
+            # pylint: disable-next=line-too-long
             "$2b$12$KBikqteDuT79adoU2g2S2OVjE8UtCjoPSzNj8In3.mE4yayQ6Y/Mq",  # another dummy password
         )
         raise AuthenticationFailedError from e

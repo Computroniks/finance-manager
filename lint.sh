@@ -4,4 +4,4 @@
 
 pylint app
 
-pylint tests --disable redefined-outer-name,unused-argument,pointless-statement,missing-module-docstring
+pylint tests --disable redefined-outer-name,unused-argument,pointless-statement,missing-module-docstring,duplicate-code

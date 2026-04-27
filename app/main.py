@@ -13,6 +13,12 @@ from app import db, accounts, profiles, auth
 
 
 def create_app() -> FastAPI:
+    """
+    Create a new app instance
+
+    Returns:
+        The app
+    """
     manager.reload()
     db.manager.init_db()
     app = FastAPI(**OPENAPI_DOCS)  # type: ignore
