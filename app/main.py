@@ -8,20 +8,17 @@ Main server entry point
 from fastapi import FastAPI
 
 from app.config import manager
-from app import db
-
-db.manager.init_db()
-manager.reload()
-app = FastAPI()
+from app.openapi import OPENAPI_DOCS  # type: ignore
+from app import db, accounts, profiles, auth
 
 
-@app.get("/")
-async def root():
-    """
-    Placeholder for the root API
+def create_app() -> FastAPI:
+    manager.reload()
+    db.manager.init_db()
+    app = FastAPI(**OPENAPI_DOCS)  # type: ignore
 
-    Returns:
-        Placeholder Message
-    """
+    app.include_router(accounts.router)
+    app.include_router(auth.router)
+    app.include_router(profiles.router)
 
-    return {"message": "Hello world"}
+    return app
