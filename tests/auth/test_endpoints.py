@@ -1,12 +1,17 @@
 # SPDX-FileCopyrightText: 2026 Zoe Nickson <zoe.nickson@sidingsmedia.com>
 # SPDX-License-Identifier: MIT
 
+from datetime import timedelta
+from uuid import UUID
+
 from fastapi.testclient import TestClient
 from fastapi import status
 import jwt
 
 from app import config
 from app.auth.flows import VALID_SCOPES
+from app.auth.service import create_access_token
+from app.auth.models import TokenData
 
 from tests import defaults
 
@@ -75,7 +80,7 @@ def test_login_no_scopes(client: TestClient):
         },
     ).json()
 
-    scopes = jwt.decode(
+    scopes = jwt.decode(  # type: ignore
         response["access_token"],
         key=config.manager.config.auth.jwt_secret,
         algorithms=config.manager.config.auth.jwt_algo,
@@ -100,3 +105,17 @@ def test_login_invalid_scope(client: TestClient):
     )
 
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
+
+
+def test_access_invalid_token(client: TestClient):
+    """Using a token for a non-existent user"""
+
+    token = create_access_token(
+        TokenData(user_id=UUID("00000000-0000-0000-0000-000000000000"), scopes=[]),
+        timedelta(seconds=config.manager.config.auth.token_lifetime),
+    )
+
+    response = client.get("/profile", headers={"Authorization": f"Bearer {token}"})
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    assert response.json()["detail"] == "Invalid token"

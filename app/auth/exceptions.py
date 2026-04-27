@@ -30,6 +30,18 @@ class AuthenticationFailedError(HTTPException):
         )
 
 
+class InvalidTokenError(HTTPException):
+    """
+    The provided token was invalid
+
+    This is because the token was invalid in some way, e.g. expired,
+    non-existent user.
+    """
+
+    def __init__(self, headers: Mapping[str, str] | None = None) -> None:
+        super().__init__(status.HTTP_403_FORBIDDEN, "Invalid token", headers)
+
+
 class MalformedTokenError(HTTPException):
     """The access token could not be read because it is malformed"""
 

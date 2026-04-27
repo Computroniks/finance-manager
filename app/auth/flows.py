@@ -24,9 +24,9 @@ from app.profiles.models import User
 
 from . import service
 from .exceptions import (
-    AuthenticationFailedError,
     InsufficientScopeError,
     InvalidScopeError,
+    InvalidTokenError,
 )
 from .models import TokenData, Token
 
@@ -119,10 +119,10 @@ async def get_current_user(
     try:
         user = get_user_by_id(db, decoded_token.user_id)
     except UserNotFoundError as e:
-        raise AuthenticationFailedError from e
+        raise InvalidTokenError from e
 
     if not user.active:
-        raise AuthenticationFailedError
+        raise InvalidTokenError
 
     if not service.token_has_access(security_scopes, decoded_token.scopes):
         raise InsufficientScopeError
